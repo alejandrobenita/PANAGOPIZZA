@@ -6,7 +6,7 @@ const PURPLE = "#4a1a6b";
 const DEEP = "#320b35";
 const DARK = "#1a1a1a";
 
-const TOTAL_FRAMES = 145;
+const TOTAL_FRAMES = 435;
 const FRAME_PATH = (i: number) => `/salads-frames/frame_${String(i).padStart(4, "0")}.jpg`;
 const FPS = 24;
 
@@ -151,7 +151,7 @@ export default function PasswordPage() {
           src="/panago-logo.png"
           alt="Panago Pizza"
           style={{
-            width: "180px",
+            width: "360px",
             marginBottom: "48px",
             display: "block",
             marginLeft: "auto",
