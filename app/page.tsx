@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 97;
-const FRAME_PATH = (i) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
+const FRAME_PATH = (i: number) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
 
 const PURPLE = "#4a1a6b";
 const DEEP = "#320b35";
@@ -45,27 +45,27 @@ const FOOTER_LINKS_LEFT = [
 const SOCIAL_ICONS = ["IG", "FB", "X"];
 
 export default function Home() {
-  const canvasRef = useRef(null);
-  const imagesRef = useRef([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef({ current: 0 });
-  const logoCenterRef = useRef(null);
-  const logoNavRef = useRef(null);
-  const logoNavImgRef = useRef(null);
-  const menuRef = useRef(null);
-  const hamburgerRef = useRef(null);
-  const sloganRef = useRef(null);
-  const since1986Ref = useRef(null);
+  const logoCenterRef = useRef<HTMLImageElement>(null);
+  const logoNavRef = useRef<HTMLDivElement>(null);
+  const logoNavImgRef = useRef<HTMLImageElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const hamburgerRef = useRef<HTMLDivElement>(null);
+  const sloganRef = useRef<HTMLDivElement>(null);
+  const since1986Ref = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d");
     canvas.width = 1920;
     canvas.height = 1080;
 
-    const drawFrame = (index) => {
+    const drawFrame = (index: number) => {
       const img = imagesRef.current[index];
-      if (!img) return;
+      if (!img || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
@@ -245,8 +245,8 @@ export default function Home() {
                 cursor: "pointer",
                 padding: "8px 24px",
               }}
-              onMouseEnter={(e) => { e.target.style.color = PURPLE; }}
-              onMouseLeave={(e) => { e.target.style.color = "#fff"; }}
+              onMouseEnter={(e) => { (e.target as HTMLElement).style.color = PURPLE; }}
+              onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "#fff"; }}
             >
               {item}
             </button>
@@ -460,8 +460,8 @@ export default function Home() {
                   cursor: "pointer",
                   transition: "background 0.3s",
                 }}
-                onMouseEnter={(e) => { e.target.style.background = DEEP; }}
-                onMouseLeave={(e) => { e.target.style.background = PURPLE; }}
+                onMouseEnter={(e) => { (e.target as HTMLElement).style.background = DEEP; }}
+                onMouseLeave={(e) => { (e.target as HTMLElement).style.background = PURPLE; }}
                 >
                   Order Now
                 </button>
@@ -502,8 +502,8 @@ export default function Home() {
                   fontWeight: 400,
                   transition: "color 0.3s",
                 }}
-                onMouseEnter={(e) => { e.target.style.color = "#fff"; }}
-                onMouseLeave={(e) => { e.target.style.color = "rgba(255,255,255,0.5)"; }}
+                onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "#fff"; }}
+                onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "rgba(255,255,255,0.5)"; }}
               >
                 {link}
               </a>
