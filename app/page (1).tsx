@@ -6,7 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 97;
-const FRAME_PATH = (i) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
+const FRAME_PATH = (i: number) =>
+  `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
 
 const PURPLE = "#4a1a6b";
 const DEEP = "#320b35";
@@ -17,24 +18,9 @@ const MENU_ITEMS = [
 ];
 
 const DEALS = [
-  {
-    title: 'Taco Churro Meal Deal',
-    desc: 'Buy a 14" large Chicken or Beef Taco pizza and get an 8 pc Churro Bites for only $2.75. Delivery fee not included.',
-    image: '/deal-taco.jpg',
-    alt: 'Taco pizza with churros',
-  },
-  {
-    title: 'Cajun Chicken Southwest Salad',
-    desc: 'Cajun chicken, romaine lettuce, fire-roasted corn, diced tomatoes, pepperoncini, black olives, green peppers + feta. Delivery fee not included.',
-    image: '/deal-salad.jpg',
-    alt: 'Fresh southwest salad',
-  },
-  {
-    title: 'Cheezy Bread Deal',
-    desc: 'Buy any 2 - 12" medium recipe pizzas and get an 8 pc Cheezy Bread (includes dip) for only $2.75. Delivery fee not included.',
-    image: '/deal-bread.jpg',
-    alt: 'Cheezy bread with pizzas',
-  },
+  { name: "Taco Churro Meal Deal", image: "/deal-taco.jpg", alt: "Taco pizza with churros" },
+  { name: "Cajun Chicken Southwest Salad", image: "/deal-salad.jpg", alt: "Fresh southwest salad" },
+  { name: "Cheezy Bread Deal", image: "/deal-bread.jpg", alt: "Cheezy bread with pizzas" },
 ];
 
 const FOOTER_LINKS_LEFT = [
@@ -45,32 +31,30 @@ const FOOTER_LINKS_LEFT = [
 const SOCIAL_ICONS = ["IG", "FB", "X"];
 
 export default function Home() {
-  const canvasRef = useRef(null);
-  const imagesRef = useRef([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef({ current: 0 });
-  const logoCenterRef = useRef(null);
-  const logoNavRef = useRef(null);
-  const logoNavImgRef = useRef(null);
-  const menuRef = useRef(null);
-  const hamburgerRef = useRef(null);
-  const sloganRef = useRef(null);
-  const since1986Ref = useRef(null);
+  const logoCenterRef = useRef<HTMLImageElement>(null);
+  const logoNavRef = useRef<HTMLImageElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const sloganRef = useRef<HTMLParagraphElement>(null);
+  const since1986Ref = useRef<HTMLParagraphElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext("2d")!;
     canvas.width = 1920;
     canvas.height = 1080;
 
-    const drawFrame = (index) => {
+    const drawFrame = (index: number) => {
       const img = imagesRef.current[index];
       if (!img) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
 
-    const images = [];
+    const images: HTMLImageElement[] = [];
     let loaded = 0;
 
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
@@ -136,41 +120,6 @@ export default function Home() {
           if (menuRef.current) menuRef.current.style.opacity = `${p}`;
         },
       });
-
-      // Color inversion when nav passes over purple section
-      ScrollTrigger.create({
-        trigger: "#deals-section",
-        start: "top 60px",
-        end: "bottom 60px",
-        onEnter: () => {
-          if (logoNavImgRef.current) logoNavImgRef.current.style.filter = "brightness(0) invert(1)";
-          if (hamburgerRef.current) {
-            const spans = hamburgerRef.current.querySelectorAll("span");
-            spans.forEach((s) => (s.style.background = "#fff"));
-          }
-        },
-        onLeave: () => {
-          if (logoNavImgRef.current) logoNavImgRef.current.style.filter = "none";
-          if (hamburgerRef.current) {
-            const spans = hamburgerRef.current.querySelectorAll("span");
-            spans.forEach((s) => (s.style.background = PURPLE));
-          }
-        },
-        onEnterBack: () => {
-          if (logoNavImgRef.current) logoNavImgRef.current.style.filter = "brightness(0) invert(1)";
-          if (hamburgerRef.current) {
-            const spans = hamburgerRef.current.querySelectorAll("span");
-            spans.forEach((s) => (s.style.background = "#fff"));
-          }
-        },
-        onLeaveBack: () => {
-          if (logoNavImgRef.current) logoNavImgRef.current.style.filter = "none";
-          if (hamburgerRef.current) {
-            const spans = hamburgerRef.current.querySelectorAll("span");
-            spans.forEach((s) => (s.style.background = PURPLE));
-          }
-        },
-      });
     };
 
     return () => {
@@ -179,7 +128,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main style={{ background: DARK, fontFamily: "Montserrat, sans-serif" }}>
+    <main style={{ background: DARK, fontFamily: "'Montserrat', sans-serif" }}>
 
       <nav style={{
         position: "fixed",
@@ -192,14 +141,14 @@ export default function Home() {
         pointerEvents: "none",
       }}>
         <img
-          ref={(el) => { logoNavRef.current = el; logoNavImgRef.current = el; }}
+          ref={logoNavRef}
           src="/panago-logo.png"
           alt="Panago Pizza"
-          style={{ width: "180px", opacity: 0, display: "block", pointerEvents: "none", filter: "none", transition: "filter 0.4s" }}
+          style={{ width: "180px", opacity: 0, display: "block", pointerEvents: "none" }}
         />
 
         <div
-          ref={(el) => { menuRef.current = el; hamburgerRef.current = el; }}
+          ref={menuRef}
           onClick={() => setMenuOpen(!menuOpen)}
           style={{
             opacity: 0,
@@ -209,11 +158,10 @@ export default function Home() {
             flexDirection: "column",
             gap: "6px",
             padding: "8px",
-            transition: "filter 0.4s",
           }}>
-          <span style={{ display: "block", width: "28px", height: "2px", background: PURPLE, transition: "background 0.4s" }} />
-          <span style={{ display: "block", width: "20px", height: "2px", background: PURPLE, transition: "background 0.4s" }} />
-          <span style={{ display: "block", width: "24px", height: "2px", background: PURPLE, transition: "background 0.4s" }} />
+          <span style={{ display: "block", width: "28px", height: "2px", background: PURPLE }} />
+          <span style={{ display: "block", width: "20px", height: "2px", background: PURPLE }} />
+          <span style={{ display: "block", width: "24px", height: "2px", background: PURPLE }} />
         </div>
       </nav>
 
@@ -238,15 +186,15 @@ export default function Home() {
                 border: "none",
                 color: "#fff",
                 fontSize: "clamp(18px, 3.5vw, 28px)",
-                fontFamily: "Montserrat, sans-serif",
+                fontFamily: "'Montserrat', sans-serif",
                 fontWeight: 300,
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
                 cursor: "pointer",
                 padding: "8px 24px",
               }}
-              onMouseEnter={(e) => { e.target.style.color = PURPLE; }}
-              onMouseLeave={(e) => { e.target.style.color = "#fff"; }}
+              onMouseEnter={(e) => { (e.target as HTMLElement).style.color = PURPLE; }}
+              onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "#fff"; }}
             >
               {item}
             </button>
@@ -345,7 +293,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section id="deals-section" style={{
+      <section style={{
         background: PURPLE,
         padding: "100px 24px 120px",
         display: "flex",
@@ -382,7 +330,7 @@ export default function Home() {
         }}>
           {DEALS.map((deal) => (
             <div
-              key={deal.title}
+              key={deal.name}
               style={{
                 background: "#fff",
                 borderRadius: "12px",
@@ -425,26 +373,16 @@ export default function Home() {
                 gap: "16px",
                 flex: 1,
               }}>
-                <div>
-                  <p style={{
-                    fontSize: "10px",
-                    letterSpacing: "0.2em",
-                    color: PURPLE,
-                    textTransform: "uppercase",
-                    marginBottom: "8px",
-                    fontWeight: 600,
-                  }}>
-                    {deal.title}
-                  </p>
-                  <p style={{
-                    fontSize: "13px",
-                    lineHeight: 1.6,
-                    color: "#555",
-                    fontWeight: 400,
-                  }}>
-                    {deal.desc}
-                  </p>
-                </div>
+                <h3 style={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: DEEP,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  lineHeight: 1.3,
+                }}>
+                  {deal.name}
+                </h3>
                 <button style={{
                   alignSelf: "flex-start",
                   padding: "14px 32px",
@@ -452,7 +390,7 @@ export default function Home() {
                   color: "#fff",
                   border: "none",
                   borderRadius: "6px",
-                  fontFamily: "Montserrat, sans-serif",
+                  fontFamily: "'Montserrat', sans-serif",
                   fontSize: "11px",
                   fontWeight: 600,
                   letterSpacing: "0.15em",
@@ -460,8 +398,8 @@ export default function Home() {
                   cursor: "pointer",
                   transition: "background 0.3s",
                 }}
-                onMouseEnter={(e) => { e.target.style.background = DEEP; }}
-                onMouseLeave={(e) => { e.target.style.background = PURPLE; }}
+                onMouseEnter={(e) => { (e.target as HTMLElement).style.background = DEEP; }}
+                onMouseLeave={(e) => { (e.target as HTMLElement).style.background = PURPLE; }}
                 >
                   Order Now
                 </button>
@@ -502,8 +440,8 @@ export default function Home() {
                   fontWeight: 400,
                   transition: "color 0.3s",
                 }}
-                onMouseEnter={(e) => { e.target.style.color = "#fff"; }}
-                onMouseLeave={(e) => { e.target.style.color = "rgba(255,255,255,0.5)"; }}
+                onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "#fff"; }}
+                onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "rgba(255,255,255,0.5)"; }}
               >
                 {link}
               </a>
@@ -606,11 +544,11 @@ export default function Home() {
       </footer>
 
       <style>{`
-        @import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap);
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
         @keyframes pulse { 0%,100%{opacity:0.35} 50%{opacity:0.1} }
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior: auto; }
-        body { font-family: Montserrat, sans-serif; }
+        body { font-family: 'Montserrat', sans-serif; }
       `}</style>
     </main>
   );
