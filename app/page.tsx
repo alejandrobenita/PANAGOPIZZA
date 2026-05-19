@@ -1,10 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const PURPLE = "#4a1a6b";
 const DEEP = "#320b35";
 const DARK = "#1a1a1a";
+
+const TOTAL_FRAMES = 145;
+const FRAME_PATH = (i: number) => `/salads-frames/frame_${String(i).padStart(4, "0")}.jpg`;
+const FPS = 24;
 
 export default function PasswordPage() {
   const [password, setPassword] = useState("");
@@ -12,6 +16,13 @@ export default function PasswordPage() {
   const [shake, setShake] = useState(false);
   const router = useRouter();
 
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const frameRef = useRef({ current: 0 });
+  const directionRef = useRef(1); // 1 = forward, -1 = backward
+  const animRef = useRef<number>(0);
+
+  // Password form handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password.toLowerCase() === "panago") {
@@ -24,6 +35,70 @@ export default function PasswordPage() {
     }
   };
 
+  // Canvas animation loop
+  useEffect(() => {
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext("2d")!;
+    canvas.width = 1920;
+    canvas.height = 1080;
+
+    const drawFrame = (index: number) => {
+      const img = imagesRef.current[index];
+      if (!img) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+
+    // Preload frames
+    const images: HTMLImageElement[] = [];
+    let loaded = 0;
+
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = FRAME_PATH(i);
+      img.onload = () => {
+        loaded++;
+        if (loaded === TOTAL_FRAMES) {
+          startAnimation();
+        }
+      };
+      images.push(img);
+    }
+    imagesRef.current = images;
+
+    const startAnimation = () => {
+      let lastTime = 0;
+      const frameInterval = 1000 / FPS;
+
+      const animate = (timestamp: number) => {
+        if (timestamp - lastTime >= frameInterval) {
+          // Update frame
+          frameRef.current.current += directionRef.current;
+
+          // Bounce back at ends
+          if (frameRef.current.current >= TOTAL_FRAMES - 1) {
+            frameRef.current.current = TOTAL_FRAMES - 1;
+            directionRef.current = -1;
+          } else if (frameRef.current.current <= 0) {
+            frameRef.current.current = 0;
+            directionRef.current = 1;
+          }
+
+          drawFrame(Math.round(frameRef.current.current));
+          lastTime = timestamp;
+        }
+
+        animRef.current = requestAnimationFrame(animate);
+      };
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    return () => {
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+    };
+  }, []);
+
   return (
     <main
       style={{
@@ -34,14 +109,42 @@ export default function PasswordPage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "24px",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Background canvas animation */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Black overlay at 50% opacity */}
       <div
         style={{
+          position: "absolute",
+          inset: 0,
+          background: "rgba(0,0,0,0.5)",
+          zIndex: 2,
+        }}
+      />
+
+      {/* Content */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 10,
           textAlign: "center",
           maxWidth: "400px",
           width: "100%",
+          padding: "24px",
         }}
       >
         <img
