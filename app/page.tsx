@@ -1,7 +1,5 @@
 "use client";
-import SaladsPreview from "./SaladsPreview";
-import SaladsPreview from "./SaladsPreview";
-import { useEffect, useRef, useState } from "react";
+import SaladsPreview from "./SaladsPreview";import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 

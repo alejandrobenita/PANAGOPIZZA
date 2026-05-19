@@ -10,10 +10,10 @@ const TOTAL_FRAMES = 145;
 const FRAME_PATH = (i: number) => `/salads-frames/frame_${String(i).padStart(4, "0")}.jpg`;
 
 const PURPLE = "#4a1a6b";
-
+const DARK = "#1a1a1a";
 export default function SaladsPreview() {
-  const canvasRef = useRef<<HTMLCanvasElement>(null);
-  const imagesRef = useRef<<HTMLImageElement[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef({ current: 0 });
 
   useEffect(() => {

@@ -14,8 +14,8 @@ const DEEP = "#320b35";
 const DARK = "#1a1a1a";
 
 export default function SaladsPage() {
-  const canvasRef = useRef<<HTMLCanvasElement>(null);
-  const imagesRef = useRef<<HTMLImageElement[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameRef = useRef({ current: 0 });
 
   useEffect(() => {
