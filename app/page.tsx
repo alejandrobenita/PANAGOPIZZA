@@ -1,4 +1,6 @@
 "use client";
+import SaladsPreview from "./SaladsPreview";
+import SaladsPreview from "./SaladsPreview";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -471,6 +473,14 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Salads Preview Section */}
+      <section id="salads-preview" style={{
+        background: DARK,
+        padding: "0",
+        position: "relative",
+      }}>
+        <SaladsPreview />
+      </section>
       <footer style={{
         background: DARK,
         padding: "64px 24px 48px",
