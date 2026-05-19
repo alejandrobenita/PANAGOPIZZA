@@ -6,11 +6,11 @@ const PURPLE = "#4a1a6b";
 const DEEP = "#320b35";
 const DARK = "#1a1a1a";
 
-const TOTAL_FRAMES = 433;
+const TOTAL_FRAMES = 431;
 const FRAME_PATH = (i: number) => {
-  if (i <= 145) return `/salads-frames/frame_${String(i).padStart(4, "0")}.jpg`;
-  if (i <= 289) return `/salads-frames/frame_${String(i + 1).padStart(4, "0")}.jpg`;
-  return `/salads-frames/frame_${String(i + 2).padStart(4, "0")}.jpg`;
+  if (i <= 144) return `/salads-frames/frame_${String(i).padStart(4, "0")}.jpg`;
+  if (i <= 287) return `/salads-frames/frame_${String(i + 4).padStart(4, "0")}.jpg`;
+  return `/salads-frames/frame_${String(i + 4).padStart(4, "0")}.jpg`;
 };
 const FPS = 24;
 
